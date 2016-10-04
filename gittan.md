@@ -20,12 +20,12 @@
 
 ### What this class IS?
 
-* Get Git CLI
-* Get Git data
+* Git CLI
+* Git data
 
 ### What this class IS NOT?
 
-* GUIs
+* Git GUIs
 
 
 # Basics
@@ -36,7 +36,7 @@
 ### Tell Git who you are
 
     git config --global user.name 'Valentino Rossi'
-    git config --global user.email 'vale@vr46.com'
+    git config --global user.email 'vale@vr46.it'
 
 ### Type less
 
@@ -47,6 +47,7 @@
 
 * `--global`: user level config in `~/.gitconfig`
 * Otherwise repo config is used in `.git/config`
+
 
 ## Browse and Edit
 
@@ -71,5 +72,57 @@
 
 ### Certain files are locked
 
-* Do not keep a Git GUI open
-* Do not keep working files open in Notepad++ during checkout
+* Git GUIs lock some files in .git, close them!
+* Checkout fails: close working files in your Windows editor
+
+
+## Let us start
+
+### Create project
+
+    mkdir gittan
+    cd gittan
+    vi motogp
+
+### Add repo later
+
+    git init
+    git add motogp
+    git commit
+
+
+## Looking and staging
+
+### State before and after edit
+
+    git status
+    vi motogp
+    git status
+
+### State after staging. Spot the difference
+
+    git add rider
+    git status
+    git commit -m 'commit message'
+
+### Implicit staging
+
+    vi motogp
+    git commit -a
+
+
+## Changes in detail
+
+### Unstaged AND staged changes, a.k.a the index
+
+    vi motogp
+    git add motogp
+    vi motogp
+    git status
+
+### Diffs
+
+    git diff                # worktree vs index
+    git diff HEAD           # worktree vs last commit
+    git diff --cached HEAD  # index vs last commit
+    git diff HEAD^ HEAD     # compare 2 commits
