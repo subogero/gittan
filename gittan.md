@@ -282,3 +282,96 @@ git status                                  # which files?
 vi motogp   # Remove <<<<<<< ======= >>>>>>> markers, edit
 git commit -a        # Automatically finishes merge commit
 ```
+
+
+# Working Together
+
+
+## Client-Server systems are BAD
+
+### Everything goes over the network
+
+* Slow
+* No infra, no life. No offline work
+
+### The paradox and the Politics
+
+* Only tested, reviewed stuff should be checked in
+* How do you know what you have tested and reviewd before checkin?
+* Every checkin is immediately public and offical. So who has commit access?
+
+
+## Distributed systems are GOOD
+
+### Nearly everything is local
+
+* Fast
+* Start project locally, work offline
+
+### Paradox and Politics? Solved
+
+* Commit in private repo
+* Publish into you your public repo
+* Becomes official by merging into third repo
+
+
+## Distributed systems are BAD. Really?
+
+### Every clone of a project contains the entire history
+
+* Not as large as you think
+
+### Chaos! Where is the official repo?
+
+* Technically, there is none
+* But in fact, you can build a far superior scalable centralised system
+
+
+## Git is distributed
+
+### Remotes
+
+* Aliases to URLs of other known repos
+* Standard protocols used, mostly HTTP and SSH
+* Clone: default remote is called `origin`
+
+### Immutable data model
+
+* Commits do not change existing data, only add new
+* Very easy to transfer new data between remotes
+
+
+## Create your Public Repo In the Cloud
+
+### Get account on Github, Stash, etc
+
+* Create account
+
+### Set up new repo on the UI
+
+* Create empty repo `gittan`
+* Copy its Clone URL to clipboard (SSH preferred)
+
+## Or Use Account on suli.subogero.com
+
+### Passwordless public-key SSH login
+
+```bash
+ssh-keygen
+ssh suli.subogero.com 'cat >>.ssh/authorized_keys' <.ssh/id_rsa.pub
+```
+
+### Create repo
+
+```bash
+ssh suli.subogero.com
+mkdir gittan.git && cd gittan.git
+git init --bare                       # Server repo, no worktree
+mv hooks/post-update.sample hooks/post-update  # for HTTP clones
+```
+
+### Copy its URL
+
+```bash
+suli.subogero.com:gittan.git   # URL in SCP format for SSH
+```
