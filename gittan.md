@@ -1,4 +1,5 @@
-# Gittan
+% $gittan =~ /suli.subogero.com/
+% Szabó Gergely
 
 
 ## Agenda
@@ -7,7 +8,7 @@
 
 * Configure, Local workflow, Data
 
-### Collaboration
+### Working Together
 
 * Remotes, Workflows
 
@@ -35,13 +36,17 @@
 ### Get a coloured prompt
 ### Tell Git who you are
 
-    git config --global user.name 'Szabo Gergely'
-    git config --global user.email 'szg@subogero.com'
+```bash
+git config --global user.name 'Szabo Gergely'
+git config --global user.email 'szg@subogero.com'
+```
 
 ### Type less
 
-    git config --global alias.lg 'log --decorate --oneline --graph --all'
-    git config --global alias.st status
+```bash
+git config --global alias.lg 'log --decorate --oneline --graph --all'
+git config --global alias.st status
+```
 
 ### What is `--global`
 
@@ -80,52 +85,66 @@
 
 ### Create project
 
-    mkdir gittan
-    cd gittan
-    vi motogp
+```bash
+mkdir gittan
+cd gittan
+vi motogp
+```
 
 ### Add repo later
 
-    git init
-    git add motogp
-    git commit
+```bash
+git init
+git add motogp
+git commit
+```
 
 
 ## Looking and staging
 
 ### State before and after edit
 
-    git status
-    vi motogp
-    git status
+```bash
+git status
+vi motogp
+git status
+```
 
 ### State after staging. Spot the difference
 
-    git add motogp
-    git status
-    git commit -m 'commit message'
+```bash
+git add motogp
+git status
+git commit -m 'commit message'
+```
 
 ### Implicit staging
 
-    vi motogp
-    git commit -a
+```bash
+vi motogp
+git commit -a
+```
 
 
 ## Changes in detail
 
 ### Unstaged AND staged changes, a.k.a the index
 
-    vi motogp
-    git add motogp
-    vi motogp
-    git status
+```bash
+vi motogp
+git add motogp
+vi motogp
+git status
+```
 
 ### Diffs
 
-    git diff                # worktree vs index
-    git diff HEAD           # worktree vs last commit
-    git diff --cached HEAD  # index vs last commit
-    git diff HEAD^ HEAD     # compare 2 commits
+```bash
+git diff                   # worktree vs index
+git diff HEAD        # worktree vs last commit
+git diff --cached HEAD  # index vs last commit
+git diff HEAD^ HEAD        # compare 2 commits
+```
 
 
 ## Data - index, HEAD, master
@@ -148,60 +167,74 @@
 
 ### Create and switch to
 
-    git branch hello       # create at HEAD
-    git checkout hello     # shwitch to branch, merges worktree and index
-    git checkout -b hello  # create and switch to in one step
-    git branch old HEAD^   # create at previous commit
+```bash
+git branch hello                             # create at HEAD
+git checkout hello  # shwitch to branch, merge worktree/index
+git checkout -b hello      # create and switch to in one step
+git branch old HEAD^              # create at previous commit
+```
 
 ### View
 
-    git branch
-    git log --oneline --decorate --graph --all
-    git lg  # this is an alias
+```bash
+git branch
+git log --oneline --decorate --graph --all
+git lg  # this is an alias
+```
 
 ### Delete
 
-    git branch -d old
-    git branch -D old  # if points to new commits
+```bash
+git branch -d old
+git branch -D old  # if points to new commits
+```
 
 
 ## Local branch workflow
 
 ### Create commits on branch `hello`
 
-    vi hello        # Add shell script doing Hello World!
-    chmod +x hello  # Make it executable
-    git add hello
-    git commit -m 'Add hello'
-    vi motogp       # Add header
-    git commit -am 'Add header to motogp'
-    git lg
+```bash
+vi hello   # Add shell script doing Hello World!
+chmod +x hello              # Make it executable
+git add hello
+git commit -m 'Add hello'
+vi motogp                           # Add header
+git commit -am 'Add header to motogp'
+git lg
+```
 
 ### Fix something on `master` then merge `hello`
 
-    git checkout master
-    vi motogp
-    git commit -am 'Add Nicky Hayden'
-    git lg
-    git merge hello
-    git lg
+```bash
+git checkout master
+vi motogp
+git commit -am 'Add Nicky Hayden'
+git lg
+git merge hello
+git lg
+```
 
 
 ## Data - Commit objects
 
 ### Refer to commits as SHA1, short SHA1, HEAD, master
 
-    HEAD^     # first parent
-    HEAD^^    # first grandparent
-    master^2  # second parent if merge commit
-    1f2c~2    # grandparent on first parent line
-    hello^2~  # grandparent on second parent line
+```bash
+HEAD^                          # first parent
+HEAD^^                    # first grandparent
+master^2      # second parent if merge commit
+1f2c~2     # grandparent on first parent line
+hello^2~  # grandparent on second parent line
+```
 
 ### Commit objects
 
-    git show master
-    git cat-file -t master  # object type
-    git cat-file -p 2c6d8   # object contents
+```bash
+git show master
+git cat-file -t master      # object type
+git cat-file -p 2c6d8   # object contents
+```
 
 * Stored in `.git/objects/2c/68d...` as a raw gzip stream, try zpipe
 * Commit object refers to parent commits, tree object
@@ -209,18 +242,22 @@
 
 ## Ignore files
 
-    git checkout -b log
-    vi hello  # Create hello.log when run
-    ./hello
-    git status
-    git add hello
-    git commit
+```bash
+git checkout -b log
+vi hello  # Create hello.log when run
+./hello
+git status
+git add hello
+git commit
+```
 
 ### We do not care about hello.log, how to ignore
 
-    vi .gitignore  # add hello.log
-    git add .gitignore
-    git commit -m 'Add .gitignore'
+```bash
+vi .gitignore  # add hello.log
+git add .gitignore
+git commit -m 'Add .gitignore'
+```
 
 ### You can have `.gitignore` files in subdirs too!
 
@@ -229,15 +266,19 @@
 
 ### Create the conflict
 
-    vi motogp
-    git commit -a
-    git checkout master
-    vi motogp  # Edit at same location
-    git commit -a
-    git merge log
+```bash
+vi motogp
+git commit -a
+git checkout master
+vi motogp            # Edit at same location
+git commit -a
+git merge log
+```
 
 ### Resolve conflict
 
-    git status     # which files?
-    vi motogp      # Remove <<<<<<< ======= >>>>>>> markers, edit
-    git commit -a  # Automatically finishes merge commit
+```bash
+git status                                  # which files?
+vi motogp   # Remove <<<<<<< ======= >>>>>>> markers, edit
+git commit -a        # Automatically finishes merge commit
+```
