@@ -1,4 +1,4 @@
-% $gittan =~ /suli.subogero.com/
+% gittan.hu
 % Szabó Gergely
 
 
@@ -81,7 +81,7 @@ git config --global alias.st status
 * Checkout fails: close working files in your Windows editor
 
 
-## Let us start
+## Let us Start
 
 ### Create project
 
@@ -100,7 +100,7 @@ git commit
 ```
 
 
-## Looking and staging
+## Looking and Staging
 
 ### State before and after edit
 
@@ -126,7 +126,7 @@ git commit -a
 ```
 
 
-## Changes in detail
+## Changes in Detail
 
 ### Unstaged AND staged changes, a.k.a the index
 
@@ -190,7 +190,7 @@ git branch -D old  # if points to new commits
 ```
 
 
-## Local branch workflow
+## Local Branch Workflow
 
 ### Create commits on branch `hello`
 
@@ -216,7 +216,7 @@ git lg
 ```
 
 
-## Data - Commit objects
+## Data - Commit Objects
 
 ### Refer to commits as SHA1, short SHA1, HEAD, master
 
@@ -240,7 +240,7 @@ git cat-file -p 2c6d8   # object contents
 * Commit object refers to parent commits, tree object
 
 
-## Ignore files
+## Ignore Files
 
 ```bash
 git checkout -b log
@@ -262,7 +262,7 @@ git commit -m 'Add .gitignore'
 ### You can have `.gitignore` files in subdirs too!
 
 
-## Merge conflicts
+## Merge Conflicts
 
 ### Create the conflict
 
@@ -287,7 +287,7 @@ git commit -a        # Automatically finishes merge commit
 # Working Together
 
 
-## Client-Server systems are BAD
+## Client-Server Systems are EVIL
 
 ### Everything goes over the network
 
@@ -301,7 +301,7 @@ git commit -a        # Automatically finishes merge commit
 * Every checkin is immediately public and offical. So who has commit access?
 
 
-## Distributed systems are GOOD
+## Distributed Systems are GOOD
 
 ### Nearly everything is local
 
@@ -315,7 +315,7 @@ git commit -a        # Automatically finishes merge commit
 * Becomes official by merging into third repo
 
 
-## Distributed systems are BAD. Really?
+## Distributed Systems are EVIL. Really?
 
 ### Every clone of a project contains the entire history
 
@@ -327,7 +327,7 @@ git commit -a        # Automatically finishes merge commit
 * But in fact, you can build a far superior scalable centralised system
 
 
-## Git is distributed
+## Git is Distributed
 
 ### Remotes
 
@@ -352,26 +352,120 @@ git commit -a        # Automatically finishes merge commit
 * Create empty repo `gittan`
 * Copy its Clone URL to clipboard (SSH preferred)
 
-## Or Use Account on suli.subogero.com
+
+## Or Use Account on `gittan`
+
+### Auto register to gittan
+
+```bash
+ssh gittan   # First attempt fails
+ssh gittan   # Second attempt will work
+```
 
 ### Passwordless public-key SSH login
 
 ```bash
 ssh-keygen
-ssh suli.subogero.com 'cat >>.ssh/authorized_keys' <.ssh/id_rsa.pub
+ssh gittan.hu 'cat >>.ssh/authorized_keys' <.ssh/id_rsa.pub
 ```
 
-### Create repo
+
+## Entire Group - New Repo on `gittan`
+
+### Create Empty Repo
 
 ```bash
-ssh suli.subogero.com
+ssh gittan.hu
 mkdir gittan.git && cd gittan.git
 git init --bare                       # Server repo, no worktree
 mv hooks/post-update.sample hooks/post-update  # for HTTP clones
 ```
 
+Or simply...
+
+```bash
+ssh gittan.hu `gitcreate gittan`
+```
+
 ### Copy its URL
 
 ```bash
-suli.subogero.com:gittan.git   # URL in SCP format for SSH
+gittan:gittan.git                 # URL in SCP format for SSH
+http://gittan/~<USER>/gittan.git  # Read-only HTTP for others
+```
+
+
+## Group Leader - Publish Your Repo
+
+### Configure new remote
+
+```bash
+git remote add origin gittan:gittan.git
+```
+
+### Copy data to remote repo
+
+```bash
+git push --all origin
+```
+
+
+## Group Member - Copy an Existing Repo
+
+### Obtain URL HTTP URL from owner
+
+### Copy entire repo including project history
+
+```bash
+git clone <URL>          # Creates default remote origin
+git clone --origin upstream <URL>   # non-default remote
+cd <repo>          # clone creates the project directory
+```
+
+### Look around
+
+```bash
+git lg             # origin/foo labels in RED: remote branches
+git branch        # Only local branch created by clone: master
+git checkout foo   # Local version of remote branch origin/foo
+git checkout -t origin/foo  # Same, with older versions of Git
+```
+
+
+## Group Members - Multiple Remotes
+
+### Add `origin` SSH URL for Own Public Repo
+
+```bash
+git remote add origin gittan:gittan.git
+```
+### Push Cloned Repo Into It
+
+```bash
+git push --all origin
+```
+
+
+## Remotes Overview
+
+### origin vs upstream
+
+* `upstream`: HTTP read-only to group leader's repo
+* `origin`: SSH read-write to own public repo
+
+### Anatomy of an SSH (SCP) URL
+
+```bash
+tibi@gittan:/tmp/gittan.git
+user@server:folder absolute path on server
+
+                   gittan:gittan.git
+default local user@server:folder relative path in user's HOME
+```
+
+### Anatomy of a HTTP URL
+
+```bash
+http://gittan/~tibi/gittan.hu
+prot://server/userd/folder in userdir
 ```
