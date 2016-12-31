@@ -294,7 +294,7 @@ git commit -a        # Automatically finishes merge commit
 * Slow
 * No infra, no life. No offline work
 
-### The paradox and the Politics
+### The Paradox and the Politics
 
 * Only tested, reviewed stuff should be checked in
 * How do you know what you have tested and reviewd before checkin?
@@ -341,6 +341,22 @@ git commit -a        # Automatically finishes merge commit
 * Very easy to transfer new data between remotes
 
 
+## Git Objects - Continued
+
+```bash
+git cat-file -t HEAD    # commit
+git cat-file -p HEAD    # commit data, contains a tree ID
+git cat-file -p <tree>  # List of filenames with subtree or blob IDs
+git cat-file -p <blob>  # Pure file contents, without the filename
+```
+
+### Implications
+
+* Objects never change, only new ones are added (unlike RCS)
+* Rename is implicit: same blob, other name in tree object
+* Same content: existing objects reused
+
+
 ## Create your Public Repo In the Cloud
 
 ### Get account on Github, Stash, etc
@@ -370,7 +386,20 @@ ssh gittan.hu 'cat >>.ssh/authorized_keys' <.ssh/id_rsa.pub
 ```
 
 
-## Entire Group - New Repo on `gittan`
+## Practice Collaboration in Small Groups
+
+### Group Hierarchy
+
+* One Dictator
+* Few Yes Men
+
+### Shared Repos
+
+* Option 1 Gittan: Local "gittan" server on RPi
+* Option 2 Cloud: Github, Stash, etc
+
+
+## Gittan - Entire Group - New Repo on `gittan`
 
 ### Create Empty Repo
 
@@ -395,7 +424,7 @@ http://gittan/~<USER>/gittan.git  # Read-only HTTP for others
 ```
 
 
-## Group Leader - Publish Your Repo
+## Gittan - Dictator - Publish Your Repo
 
 ### Configure new remote
 
@@ -410,7 +439,7 @@ git push --all origin
 ```
 
 
-## Group Member - Copy an Existing Repo
+## Gittan - Yes Men - Copy an Existing Repo
 
 ### Obtain URL HTTP URL from owner
 
@@ -432,7 +461,7 @@ git checkout -t origin/foo  # Same, with older versions of Git
 ```
 
 
-## Group Members - Multiple Remotes
+## Gittan - Yes Men - Multiple Remotes
 
 ### Add `origin` SSH URL for Own Public Repo
 
@@ -445,12 +474,22 @@ git remote add origin gittan:gittan.git
 git push --all origin
 ```
 
+### Overview Remotes
+
+```bash
+git remote -v  # v for verbose
+origin	gittan:gittan.git (fetch)
+origin	gittan:gittan.git (push)
+upstream	http://gittan/~dictator/gittan.git (fetch)
+upstream	http://gittan/~dictator/gittan.git (push)
+```
+
 
 ## Remotes Overview
 
 ### origin vs upstream
 
-* `upstream`: HTTP read-only to group leader's repo
+* `upstream`: HTTP read-only to Dictator's repo
 * `origin`: SSH read-write to own public repo
 
 ### Anatomy of an SSH (SCP) URL
@@ -469,3 +508,162 @@ default local user@server:folder relative path in user's HOME
 http://gittan/~tibi/gittan.hu
 prot://server/userd/folder in userdir
 ```
+
+
+## Gittan - Flat Repo Hierarchy
+
+```
+-----gittan-----------------------------------------------
+|                                                        |
+|  -----------          ----------          -----------  |
+|  |Yes Man 1|      ----|Dictator|----      |Yes Man 2|  |
+|  -----------\    /    ----------    \    /-----------  |
+|    |         \  /         |          \  /         |    |
+-----|----------\/----------|-----------\/----------|-----
+  origin        /\       origin         /\        origin
+     |  upstream  ym1       |        ym2  upstream  |
+   -----------/    \    ----------    /    \-----------
+   |Yes Man 1|      ----|Dictator|----      |Yes Man 2|
+   -----------          ----------          -----------
+```
+
+
+## Cloud - Fork vs Clone
+
+```
+-----Cloud-----------------------------------
+|                                           |
+|  ----------     >> fork >>      --------  |
+|  |upstream|---------------------|origin|  |
+|  ---------- << pull request <<  --------  |
+|       |                            |      |
+--------|----------------------------|-------
+        |                            |
+  fetch |           clone/fetch/push |
+        |                        ---------
+         ------------------------|Yes Man|
+                                 ---------
+```
+
+
+## Fetch vs Pull
+
+### `git fetch <remote>`
+
+* Update all remote branches, fetch new objects
+* Do not touch local branches, index, worktree
+* You can look around what happened elsewhere
+
+### `git pull origin master`
+
+* A combination of 2 commands
+
+```bash
+git fetch origin
+git merge origin/master
+```
+
+* Merges into *current* branch, whatever it may be!
+
+
+## Yes Man Workflow: Commit - Push - Request
+
+### Commit and publish change
+
+```bash
+git commit
+git push origin <branch>
+```
+
+Then notify Dictator to pull from you, supply
+
+* your read-only HTTP URL
+* your branch name
+* target branch name, probably `master`
+
+
+## Dictator Workflow
+
+### Pull from Yes Man upon Request
+
+```bash
+git remote add <userremote> <URL>
+git fetch <userremote> <branch>
+git merge <userremote>/<branch>
+```
+
+### Dictator in Conflict
+
+* Dictator resolves it locally, finishes merge
+* Reject request, ask Yes Man to resolve conflict
+
+
+## Yes Man in Conflict - Merge vs Rebase
+
+### Merge - bubble in history
+
+```bash
+git fetch upstream
+git merge upstream/master  # Into current branch, resolve conflict
+# OR IN ONE STEP
+git pull upstream master
+```
+
+### Rebase - linear history, rebuild branch on new base
+
+```bash
+git fetch upstream
+git rebase upstream/master  # Into current branch, resolve conflict
+# OR IN ONE STEP
+git pull --rebase upstream master
+```
+
+
+## Dictator Release Workflow
+
+```bash
+git tag 1.1     # Lightweight tag, just a static ref in /ref/tags
+git tag -a 1.1  # Annotated tag with description in tag object
+git tag -s 1.1  # Signed tag object, with additional GPG signature
+git push --tags origin
+```
+
+
+
+# From Chaos to Harmony
+
+
+## Find - Log of File
+
+
+## Find - Blame
+
+
+## Find - Bisect
+
+
+## Undo - Revert
+
+
+## Undo - Reset
+
+
+## Find - Reflog
+
+
+## Fix Runaway Worktree - Add by Patch
+
+
+## Fix Last - Amend
+
+
+## Fix Earlier - Interactive Rebase
+
+
+## Fix Backporting - Cherry Pick
+
+
+## Publish Fixed
+
+
+## Unpublish Deleted
