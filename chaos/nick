@@ -1,4 +1,13 @@
 #!/usr/bin/perl -l
+
+if ($ARGV[0] eq '-h') {
+    print <<EOF;
+Usage: nick <rider>
+Print nickname of MotoGP rider
+EOF
+    exit 0;
+}
+
 my %nickname = (
     Rossi => 'The Doctor',
     Stoner => 'Stacey Moaner',
@@ -16,4 +25,5 @@ my %nickname = (
     Marquez => 'Bimbominchia',
 );
 
-$nick = $nickname{shift()} and print $nick;
+my $rider = shift;
+$nick = $nickname{$rider} and print $nick;
