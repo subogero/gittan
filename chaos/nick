@@ -11,6 +11,7 @@ my %nickname = (
     Hayden => 'Kentucky Kid',
     Simoncelli => 'Sic',
     Crutchlow => 'The Dog',
+    Marquez => 'Bimbominchia',
 );
 
 $nick = $nickname{shift()} and print $nick;
