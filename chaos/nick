@@ -1,6 +1,8 @@
 #!/usr/bin/perl -l
 my %nickname = (
     Rossi => 'The Doctor',
+    Stoner => 'Stacey Moaner',
+    Doohan => 'Mad Mick',
     Iannone => 'The Maniac',
     Spencer => 'Fast Freddie',
     Edwards => 'Texas Tornado',
