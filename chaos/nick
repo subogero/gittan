@@ -1,0 +1,16 @@
+#!/usr/bin/perl -l
+my %nickname = (
+    Rossi => 'The Doctor',
+    Iannone => 'The Maniac',
+    Spencer => 'Fast Freddie',
+    Edwards => 'Texas Tornado',
+    Capirossi => 'Capirex',
+    Biaggi => 'Mad Max',
+    Lorenzo => 'JLo',
+    Dovizioso => 'Desmodovi',
+    Hayden => 'Kentucky Kid',
+    Simoncelli => 'Sic',
+    Crutchlow => 'The Dog',
+);
+
+$nick = $nickname{shift()} and print $nick;
