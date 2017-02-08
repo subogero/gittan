@@ -633,37 +633,141 @@ git push --tags origin
 # From Chaos to Harmony
 
 
-## Find - Log of File
-
-
-## Find - Blame
-
-
-## Find - Bisect
-
-
-## Undo - Revert
-
-
 ## Undo - Reset
 
+```bash
+git reset               # Undo git add/rm/mv (index)
+git reset HEAD^         # Undo last commit, but keep its worktree
 
-## Find - Reflog
+git reset --hard        # Undo changes in index and worktree
+git reset --hard HEAD^  # Undo last commit, including index and worktree
 
+git reset --soft HEAD^  # Undo last commit, but keep its worktree, staged
+```
 
 ## Fix Runaway Worktree - Add by Patch
 
+```bash
+git add -p [FILE]
+```
+
+### Hunk
+
+Contiguous piece of changes in diff, bordered by unchanged context lines
+
+### Hunk operations
+
+* y: add hunk to index
+* n: keep hunk unstaged, only in worktree
+* s: split hunk into smaller hunks, if possible
 
 ## Fix Last - Amend
 
+```bash
+git commit --amend
+git commit -a --amend
+```
+
+Rewrite last commit, allows changinh content or just the commit message.
+
+## Find - Reflog
+
+```bash
+git reflog
+```
+
+Helps finding deleted (invisible commits) after editing history
+
+## Find - Blame
+
+```bash
+git blame FILE
+```
+
+Prints file, each line annotated with commit data where it was last changed.
+
+## Find - Bisect
+
+```bash
+git bisect start
+git bisect bad
+git bisect good 1.0
+# Checks out commit in the middle, test it
+git bisect bad
+# Checks out commit in the middle, test it
+git bisect good
+# Checks out commit in the middle, bug was introduced here
+# Create branch here to mark commit
+git bisect reset
+```
+
+Binary search to find where a bug was introduced.
+
+## Undo - Revert
+
+```bash
+git revert <commit>
+```
+
+Undo earlier commit as new commit - apply inverse patch
 
 ## Fix Earlier - Interactive Rebase
 
+```bash
+git rebase -i BASE          # Rewrite current branch based on BASE
+git rebase -i BASE BRANCH   # Rewrite other branch
+git rebase -i --onto TO BASE # Rewrite from BASE, move TO new base
+```
+
+### Starts with editing TODO list
+
+* delete line: skip commit from rewritten history
+* `squash`: unify with previous commit above, prompt for message
+* `fixup`: same, take message of previous commit unchanged
+* `reword`: apply commit, prompt for changing its message
+* `edit`: stop for doing additional changes
+
+```bash
+git rebase --continue  # e.g. after edit or conflict resolution
+git rebase --abort     # Escape from unmanageable conflicts, etc
+```
 
 ## Fix Backporting - Cherry Pick
 
+```bash
+git checkout 1.0
+git cherry-pick COMMIT
+```
+
+Unlike `merge`, applies only specified commit(s) to top of current branch.
+Allows stable release management, with only important fixes,
+but no new features.
 
 ## Publish Fixed
 
+```bash
+git push -f origin BRANCH
+```
 
-## Unpublish Deleted
+Push a rewritten branch, rejected by default w/o `--force` option.
+
+## Publish Tricks
+
+```bash
+git push origin foo:bar  # push local foo branch into bar in remote
+git push origin :foo                # Delete foo branch from remote
+git push --tags origin    # push tags explicitly, otherwise skipped
+```
+
+## Save Work in Temporary Commit
+
+```bash
+# Save worktree and index into tmp commits, then clear both
+git stash save
+# Restore worktree and index from stash, remove stash
+git stash pop
+# Remove stash, w/o applying its changes
+git stash drop
+```
+
+# Questions, Discussion, Drinks
