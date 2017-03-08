@@ -1,6 +1,4 @@
-% gittan.hu
-% Szabó Gergely
-
+# Intro
 
 ## Agenda
 
@@ -19,14 +17,16 @@
 
 ## Disclaimer
 
-### What this class IS?
+### What We Cover
 
 * Git CLI
 * Git data
+* Hands on Labs
 
-### What this class IS NOT?
+### What We Do Not Cover
 
 * Git GUIs
+* Buzzwords
 
 
 # Basics
